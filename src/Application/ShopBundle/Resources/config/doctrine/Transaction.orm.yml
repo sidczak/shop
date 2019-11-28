@@ -1,0 +1,122 @@
+# src/Application/ShopBundle/Resources/config/doctrine/Transaction.orm.yml
+Application\ShopBundle\Entity\Transaction:
+  type: entity
+  #repositoryClass: Application\ShopBundle\Repository\TransactionRepository
+  table: transaction
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    company:
+      type: string
+      length: 128
+      nullable: true
+    #company_vat_id: #NIP
+    #  type: string
+    #  length: 128
+    #  nullable: true
+    email:
+      type: string
+      length: 128
+    billing_firstname:
+      type: string
+      length: 128
+    billing_lastname:
+      type: string
+      length: 128
+    billing_phone:
+      type: string
+      length: 32
+      nullable: true
+    billing_fax:
+      type: string
+      length: 32
+      nullable: true
+    billing_address:
+      type: string
+      length: 255
+    billing_address2:
+      type: string
+      length: 255
+      nullable: true
+    billing_city:
+      type: string
+      length: 64
+    billing_country:
+      type: string
+      length: 32
+    billing_zipcode:
+      type: string
+      length: 32
+    shipping_firstname:
+      type: string
+      length: 128
+    shipping_lastname:
+      type: string
+      length: 128
+    shipping_phone:
+      type: string
+      length: 32
+      nullable: true
+    shipping_fax:
+      type: string
+      length: 32
+      nullable: true
+    shipping_address:
+      type: string
+      length: 255
+    shipping_address2:
+      type: string
+      length: 255
+      nullable: true
+    shipping_city:
+      type: string
+      length: 64
+    shipping_country:
+      type: string
+      length: 32
+    shipping_zipcode:
+      type: string
+      length: 32
+    quantity:
+      type: integer
+    subtotal:
+      type: decimal
+      scale: 2
+    total:
+      type: decimal
+      scale: 2
+    payment_method:
+      type: string
+      length: 32
+    shipping_cost:
+      type: decimal
+      scale: 2
+    shipping_method:
+      type: string
+      length: 32
+    status:
+      type: integer
+    created_at:
+      type: datetime
+    #updated_at:
+    #  type: datetime
+    #finished_at:
+    #  type: datetime
+  oneToMany:
+    products:
+      targetEntity: ProductTransaction
+      mappedBy: transaction
+      cascade: [ remove ]
+  manyToOne:
+    user:
+      targetEntity: User
+      inversedBy: transactions
+      #cascade: [ persist ]
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue, setShippingData ]
+    preUpdate: [ setShippingData ]
